@@ -3,8 +3,11 @@
 features
 - 功能：新增了在线翻译功能
 - 样式：更改选中的搜索的排版
+- 配置：调小记单词弹幕的默认滑动速度
 
-提倡友好使用，请各位使用前配置上appkey和key，以保护作者接口使用安全。
+提倡友好使用，请在使用前配置appkey和key，保护原作者权益。
+
+[插件下载](https://github.com/kasoqian/BlueSea/releases/download/v1.0.0/BlueSea.crx)
 
 ---
 
