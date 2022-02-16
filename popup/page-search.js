@@ -17,8 +17,12 @@ const Search = () => {
   let [options, setOptions] = useState([]);
 
   let getResult = async words => {
+    const config = await bluesea.getConfig();
+
     let resData = await fetch(
-      `https://service-pnrys8g3-1254074572.bj.apigw.tencentcs.com/release?text=${words}`,
+      `https://service-pnrys8g3-1254074572.bj.apigw.tencentcs.com/release?text=${words}&appkey=${
+        config["有道智云appkey"] || ""
+      }&key=${config["有道智云key"] || ""}`,
     ).then(raw => raw.json());
     setOptions(resData.content.basic.explains);
   };
