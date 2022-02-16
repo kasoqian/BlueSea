@@ -22,22 +22,26 @@ class Storage {
           if (chrome.storage) {
             resolve(chrome.storage);
           } else {
-            reject(new Error('等待后，依旧没有获取到chrome.storage'));
+            reject(
+              new Error(
+                "等待后，依旧没有获取到chrome.storage",
+              ),
+            );
           }
         }, 1000);
       });
     }
   }
   async get() {
-    return new Promise(async (resolve) => {
+    return new Promise(async resolve => {
       const storage = await this._getRootStorage();
-      storage.local.get(this.key, (obj) => {
+      storage.local.get(this.key, obj => {
         resolve(obj[this.key]);
       });
     });
   }
   async set(value) {
-    return new Promise(async (resolve) => {
+    return new Promise(async resolve => {
       const storage = await this._getRootStorage();
       storage.local.set({ [this.key]: value }, () => {
         resolve();
@@ -48,15 +52,15 @@ class Storage {
     const storage = await this._getRootStorage();
 
     storage.onChanged.addListener((changes, namespace) => {
-      if (namespace === 'local' && changes[this.key]) {
+      if (namespace === "local" && changes[this.key]) {
         cb(changes[this.key].newValue);
       }
     });
   }
 }
 
-const materialsDB = new Storage('materials');
-const configDB = new Storage('config');
+const materialsDB = new Storage("materials");
+const configDB = new Storage("config");
 
 const defaultConfig = {
   划词翻译: true,
@@ -67,9 +71,9 @@ const defaultConfig = {
   自动发音: true,
   中文注解: false,
   隐藏完成复习的单词: true,
-  单词弹幕速度: 12,
-  有道智云key: '',
-  有道智云appkey: ''
+  单词弹幕速度: 50,
+  有道智云key: "",
+  有道智云appkey: "",
   // 记忆曲线自定义: [],
   // 高亮单词样式: '',
   // 黑名单内标签，将不会激活划词功能
@@ -79,12 +83,12 @@ const defaultConfig = {
 class BlueSea {
   constant = {
     sortRule: {
-      ctime: '创建时间（近->远）',
-      learnTime: '复习时间（近->远）',
-      learnLevel: '复习级别(低->高)',
-      tabCount: '当前页面词频（高->低）',
-      todayCount: '当天词频（高->低）',
-      count: '总词频（高->低）',
+      ctime: "创建时间（近->远）",
+      learnTime: "复习时间（近->远）",
+      learnLevel: "复习级别(低->高)",
+      tabCount: "当前页面词频（高->低）",
+      todayCount: "当天词频（高->低）",
+      count: "总词频（高->低）",
     },
   };
   forgettingCurve = [
@@ -125,7 +129,7 @@ class BlueSea {
   async getMaterials() {
     const l = await materialsDB.get();
     const config = await this.getConfig();
-    const hideLearnedWord = config['隐藏完成复习的单词'];
+    const hideLearnedWord = config["隐藏完成复习的单词"];
     if (hideLearnedWord) {
       return l.filter(({ learn }) => {
         return !learn.done;
@@ -134,7 +138,6 @@ class BlueSea {
       return l;
     }
   }
-
 
   async setMaterials(l) {
     return materialsDB.set(l);
@@ -165,17 +168,22 @@ class BlueSea {
 
   async updateMaterialObj(material) {
     const l = await this.getMaterials();
-    const i = l.findIndex(it => it.text === material.text)
-    l.splice(i, 1, material)
+    const i = l.findIndex(it => it.text === material.text);
+    l.splice(i, 1, material);
     await this.setMaterials(l);
   }
 
   async addMaterialObj(material) {
     const l = await this.getMaterials();
-    const existMaterial = l.find((it) => it.text === material.text);
+    const existMaterial = l.find(
+      it => it.text === material.text,
+    );
     if (existMaterial) {
       existMaterial.textExts = Array.from(
-        new Set([...(existMaterial.textExts || []), ...material.textExts])
+        new Set([
+          ...(existMaterial.textExts || []),
+          ...material.textExts,
+        ]),
       );
       await this.setMaterials(l);
       return;
@@ -185,7 +193,9 @@ class BlueSea {
 
   async delMaterial(text) {
     const materialList = await materialsDB.get();
-    const newL = materialList.filter((it) => it.text !== text);
+    const newL = materialList.filter(
+      it => it.text !== text,
+    );
     materialsDB.set(newL);
   }
 
@@ -195,7 +205,7 @@ class BlueSea {
       (async () => {
         const config = await configDB.get();
         _setConfig(config);
-        configDB.watch(async (val) => {
+        configDB.watch(async val => {
           _setConfig(val);
         });
       })();
@@ -203,32 +213,38 @@ class BlueSea {
     return _config;
   }
   forStatisticTodayCount(material) {
-    const today = dayjs().format('YYYY-MM-DD');
+    const today = dayjs().format("YYYY-MM-DD");
     if (!material.statistics) {
       return 0;
     }
     if (!material.statistics[today]) {
       return 0;
     }
-    return Object.values(material.statistics[today]).reduce((pre, cur) => {
-      return pre + cur;
-    }, 0);
+    return Object.values(material.statistics[today]).reduce(
+      (pre, cur) => {
+        return pre + cur;
+      },
+      0,
+    );
   }
   forStatisticAllCount(material) {
     if (!material.statistics) {
       return 0;
     }
-    return Object.values(material.statistics).reduce((pre, cur) => {
-      return (
-        pre +
-        Object.values(cur).reduce((pre2, cur2) => {
-          return pre2 + cur2;
-        }, 0)
-      );
-    }, 0);
+    return Object.values(material.statistics).reduce(
+      (pre, cur) => {
+        return (
+          pre +
+          Object.values(cur).reduce((pre2, cur2) => {
+            return pre2 + cur2;
+          }, 0)
+        );
+      },
+      0,
+    );
   }
   forStatisticTabCount(material, url) {
-    const today = dayjs().format('YYYY-MM-DD');
+    const today = dayjs().format("YYYY-MM-DD");
     if (!material.statistics) {
       return 0;
     }
@@ -239,7 +255,7 @@ class BlueSea {
   }
 
   async getTabUrl() {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       chrome.tabs.query(
         {
           active: true,
@@ -247,12 +263,12 @@ class BlueSea {
         },
         ([tab]) => {
           resolve(tab.url);
-        }
+        },
       );
     });
   }
   useTabUrl() {
-    const [_url, setUrl] = useState('');
+    const [_url, setUrl] = useState("");
     useEffect(() => {
       (async () => {
         const url = await this.getTabUrl();
@@ -271,7 +287,9 @@ class BlueSea {
       },
       learnTime: () => {
         return l.sort((a, b) => {
-          return a.learn.learnDate < b.learn.learnDate ? -1 : 1;
+          return a.learn.learnDate < b.learn.learnDate
+            ? -1
+            : 1;
         });
       },
       learnLevel: () => {
@@ -281,13 +299,14 @@ class BlueSea {
       },
       todayCount: () => {
         return l.sort((a, b) => {
-          return this.forStatisticTodayCount(a) < this.forStatisticTodayCount(b)
+          return this.forStatisticTodayCount(a) <
+            this.forStatisticTodayCount(b)
             ? 1
             : -1;
         });
       },
       tabCount: async () => {
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
           chrome.tabs.query(
             {
               active: true,
@@ -296,19 +315,22 @@ class BlueSea {
             ([tab]) => {
               resolve(
                 l.sort((a, b) => {
-                  return this.forStatisticTabCount(a, tab.url) <
-                    this.forStatisticTabCount(b, tab.url)
+                  return this.forStatisticTabCount(
+                    a,
+                    tab.url,
+                  ) < this.forStatisticTabCount(b, tab.url)
                     ? 1
                     : -1;
-                })
+                }),
               );
-            }
+            },
           );
         });
       },
       count: () => {
         return l.sort((a, b) => {
-          return this.forStatisticAllCount(a) < this.forStatisticAllCount(b)
+          return this.forStatisticAllCount(a) <
+            this.forStatisticAllCount(b)
             ? 1
             : -1;
         });
@@ -320,7 +342,7 @@ class BlueSea {
 
   useMaterialsMate() {
     const [list, setList] = useState([]);
-    const [sortRule, setSortRule] = useState('ctime');
+    const [sortRule, setSortRule] = useState("ctime");
 
     const refresh = async () => {
       const l = await materialsDB.get();
@@ -347,7 +369,9 @@ class BlueSea {
     return {
       level: 0,
       // 在一个时间节点内出现几次才进入下一个节点，并计算下个节点的时间。如果多次点没记住，那么就回滚到上个级别，以此类推。
-      learnDate: dayjs().add(this.forgettingCurve[0], 'm').format(),
+      learnDate: dayjs()
+        .add(this.forgettingCurve[0], "m")
+        .format(),
     };
   }
 
@@ -362,11 +386,15 @@ class BlueSea {
 
   async toLearnNext(text) {
     const materialList = await this.getMaterials();
-    const material = materialList.find((it) => it.text === text);
+    const material = materialList.find(
+      it => it.text === text,
+    );
     const level = material.learn.level + 1;
 
     if (this.forgettingCurve[level]) {
-      const time = dayjs().add(this.forgettingCurve[level], 'm').format();
+      const time = dayjs()
+        .add(this.forgettingCurve[level], "m")
+        .format();
       material.learn = {
         level,
         learnDate: time,
@@ -382,10 +410,14 @@ class BlueSea {
 
   async toLearnBack(text) {
     const materialList = await this.getMaterials();
-    const material = materialList.find((it) => it.text === text);
+    const material = materialList.find(
+      it => it.text === text,
+    );
     material.learn = {
       level: 0,
-      learnDate: dayjs().add(this.forgettingCurve[0], 'm').format(),
+      learnDate: dayjs()
+        .add(this.forgettingCurve[0], "m")
+        .format(),
     };
     await this.setMaterials(materialList);
   }
@@ -397,7 +429,7 @@ class FunCtrl {
   fns = [];
   constructor() {
     configDB.watch(() => {
-      this.fns.forEach(async (it) => {
+      this.fns.forEach(async it => {
         it.clear();
         const inBlack = await this.testBlack();
         const config = await bluesea.getConfig();
@@ -426,9 +458,9 @@ class FunCtrl {
   }
   async testBlack() {
     const config = await bluesea.getConfig();
-    const blackList = config['黑名单'];
+    const blackList = config["黑名单"];
     const hostname = new URL(window.location).hostname;
-    return blackList.some((it) => it === hostname);
+    return blackList.some(it => it === hostname);
   }
 }
 
