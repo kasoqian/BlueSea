@@ -1,31 +1,63 @@
-const Search = () => {
-  const { list } = bluesea.useMaterialsMate();
+function debounce(fn, delay) {
+  let timer = null;
+  return function () {
+    if (timer) {
+      clearTimeout(timer);
+      timer = setTimeout(fn, delay);
+    } else {
+      timer = setTimeout(fn, delay);
+    }
+  };
+}
 
-  const [text, setText] = useState('');
+const Search = () => {
+  const [text, setText] = useState("");
   const [material, setMaterial] = useState(null);
 
-  const options = list
-    .filter((it) => {
-      if (!text) {
-        return false;
-      }
-      return it.text.startsWith(text);
-    })
-    .slice(0, 8);
+  let [options, setOptions] = useState([]);
+
+  let getResult = async words => {
+    let resData = await fetch(
+      `https://service-pnrys8g3-1254074572.bj.apigw.tencentcs.com/release?text=${words}`,
+    ).then(raw => raw.json());
+    setOptions(resData.content.basic.explains);
+  };
+
+  let getResultPower = words =>
+    debounce(getResult(words), 2000);
 
   return html`
-    <div style="height: 400px; overflow-y: auto; box-sizing: border-box;">
+    <div
+      style="height: 400px; overflow-y: auto; box-sizing: border-box;"
+    >
       <div>
         <input
           class="search-input"
           placeholder="查词"
           value=${text}
-          onInput=${(e) => {
+          onInput=${e => {
             setText(e.target.value);
             setMaterial(null);
+            getResultPower(e.target.value);
           }}
         />
       </div>
+      ${options.length === 0
+        ? html`<h1
+            style="line-height: 200px;text-align: center;width: 100%;color: grey;font-weight: 300;"
+          >
+            请输入查询词
+          </h1>`
+        : ""}
+      ${options.map(
+        it =>
+          html`<div
+            class="search-item"
+            style="background: #fff;font-weight: 400;border-radius: 5px;margin: 10px;padding: 5px 30px;font-size: 14px;"
+          >
+            ${it}
+          </div>`,
+      )}
       ${!material &&
       html`
         <div
@@ -35,28 +67,7 @@ const Search = () => {
         margin: 0 auto;
         margin-top: 16px;
         border-radius: 4px;"
-        >
-          ${options.length === 0 &&
-          text &&
-          html`<div class="search-tip">暂无数据...</div>`}
-          ${options.length === 0 &&
-          !text &&
-          html`<div class="search-tip">
-            请在上方输入框中，输入英文进行数据检索。目前仅支持对已收藏单词进行检索。
-          </div>`}
-          ${options.map(
-            (it) =>
-              html`<div
-                class="search-item"
-                onClick=${() => {
-                  setMaterial(it);
-                  setText(it.text);
-                }}
-              >
-                ${it.text}: ${it.translation}
-              </div>`
-          )}
-        </div>
+        ></div>
       `}
       ${material &&
       html`<div
@@ -73,3 +84,8 @@ const Search = () => {
     </div>
   `;
 };
+
+//  ${getResult.map(
+//     it =>
+//       html`<div class="search-item">${it}: ${it}</div>`,
+//   )}
