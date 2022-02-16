@@ -1,8 +1,8 @@
-const forPhonetic = (text) => {
+const forPhonetic = text => {
   if (!text) {
-    return '';
+    return "";
   }
-  return text.split(';')[0].split(',')[0];
+  return text.split(";")[0].split(",")[0];
 };
 
 const TfCard = ({ tfData }) => {
@@ -10,7 +10,9 @@ const TfCard = ({ tfData }) => {
     <div style="flex: 1;padding: 8px;">
       <div class="card-row">
         <div style="font-size: 18px;font-weight: bold;">
-          ${tfData.returnPhrase ? tfData.returnPhrase[0] : tfData.query}
+          ${tfData.returnPhrase
+            ? tfData.returnPhrase[0]
+            : tfData.query}
         </div>
         <svg
           style="margin-left: 4px;margin-bottom: -3px;cursor: pointer;"
@@ -22,17 +24,21 @@ const TfCard = ({ tfData }) => {
           p-id="1940"
           width="16"
           height="16"
-          onClick=${(e) => {
-             e.stopPropagation()
-            var audioBlock = document.createElement('audio');
+          onClick=${e => {
+            e.stopPropagation();
+            var audioBlock =
+              document.createElement("audio");
             audioBlock.setAttribute(
-              'src',
-              `https://dict.youdao.com/dictvoice?audio=${tfData.query}`
+              "src",
+              `https://dict.youdao.com/dictvoice?audio=${tfData.query}`,
             );
             audioBlock.play();
-            audioBlock.addEventListener('ended', function () {
-              // console.log('声音播放完了');
-            });
+            audioBlock.addEventListener(
+              "ended",
+              function () {
+                // console.log('声音播放完了');
+              },
+            );
           }}
         >
           <path
@@ -45,29 +51,37 @@ const TfCard = ({ tfData }) => {
 
       <div class="flex: 1">
         <!-- 英标 -->
-        ${tfData.basic && tfData.basic['uk-phonetic']
+        ${tfData.basic && tfData.basic["uk-phonetic"]
           ? html` <div>
               <div class="card-row">
                 <span>英</span
                 ><span style="color: #f00; margin-left: 2px"
-                  >[${forPhonetic(tfData.basic['uk-phonetic'])}]</span
+                  >[${forPhonetic(
+                    tfData.basic["uk-phonetic"],
+                  )}]</span
                 >
               </div>
               <div class="card-row">
                 <span>美</span
                 ><span style="color: #f00; margin-left: 2px"
-                  >[${forPhonetic(tfData.basic['us-phonetic'])}]</span
+                  >[${forPhonetic(
+                    tfData.basic["us-phonetic"],
+                  )}]</span
                 >
               </div>
             </div>`
-          : ''}
+          : ""}
         <div style="height: 4px;"></div>
         ${tfData.basic
-          ? tfData.basic.explains.map((it) => {
-              return html`<div class="card-row">${it}</div>`;
+          ? tfData.basic.explains.map(it => {
+              return html`<div class="card-row">
+                ${it}
+              </div>`;
             })
-          : tfData.translation.map((it) => {
-              return html`<div class="card-row">${it}</div>`;
+          : tfData.translation.map(it => {
+              return html`<div class="card-row">
+                ${it}
+              </div>`;
             })}
       </div>
     </div>

@@ -135,7 +135,7 @@ function makeBulletApp(
             text-align: center;
             color: #fff;
             border-radius: 4px;
-            padding: 4px;
+            padding: 8px;
             cursor: pointer;
             user-select: none;
             background: #0070f3;"

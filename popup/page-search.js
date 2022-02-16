@@ -37,7 +37,7 @@ const Search = () => {
       <div>
         <input
           class="search-input"
-          placeholder="查词"
+          placeholder="..."
           value=${text}
           onInput=${e => {
             setText(e.target.value);
@@ -47,17 +47,17 @@ const Search = () => {
         />
       </div>
       ${options.length === 0
-        ? html`<h1
+        ? html`<h3
             style="line-height: 200px;text-align: center;width: 100%;color: grey;font-weight: 300;"
           >
             请输入查询词
-          </h1>`
+          </h3>`
         : ""}
       ${options.map(
         it =>
           html`<div
             class="search-item"
-            style="background: #fff;font-weight: 400;border-radius: 5px;margin: 10px;padding: 5px 30px;font-size: 14px;"
+            style="background: #fff;font-weight: 400;border-radius: 5px;margin: 10px;padding: 10px 30px;font-size: 16px;"
           >
             ${it}
           </div>`,

@@ -473,13 +473,6 @@ const Material = () => {
           <span>排序：</span>
           <span
             className="btn_hover"
-            style=${{
-              flex: 1,
-              padding: "2px 4px",
-              cursor: "pointer",
-              userSelect: "none",
-              borderRadius: 2,
-            }}
             onclick=${() => {
               setVisibleModalSortRules(true);
             }}
@@ -495,13 +488,6 @@ const Material = () => {
         >
           <div
             className="btn_hover"
-            style=${{
-              flex: 1,
-              padding: "2px 4px",
-              userSelect: "none",
-              borderRadius: 2,
-              // cursor: 'not-allowed',
-            }}
             onClick=${() => {
               const inputEl =
                 document.createElement("input");
@@ -619,13 +605,6 @@ const Material = () => {
           <div style=${{ padding: 2 }}></div>
           <div
             className="btn_hover"
-            style=${{
-              flex: 1,
-              padding: "2px 4px",
-              cursor: "pointer",
-              userSelect: "none",
-              borderRadius: 2,
-            }}
             onClick=${() => {
               setVisibleModalExport(true);
             }}
@@ -635,7 +614,7 @@ const Material = () => {
         </div>
       </div>
       <div
-        style="padding: 4px;flex: 1;"
+        style="background: #fff;margin: 10px 0;padding: 5px;padding-bottom:30px;flex: 1 1 0%;"
         onMouseUp=${e => {
           const target = e.target;
           if (!target) return;
@@ -675,7 +654,7 @@ const Material = () => {
         }}
       >
         <div
-          style="padding: 4px;border-bottom: 1px solid #ccc;display: flex;"
+          style="border-bottom: 1px solid #ccc;display: flex;font-weight:800;line-height:3"
         >
           <div style="color: #888;">
             单词词组（${list.length}）

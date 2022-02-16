@@ -2,18 +2,30 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
     <title>Document</title>
   </head>
   <body>
     <style>
       .search-input {
-        width: 260px;
-        margin: 0 auto;
-        margin-top: 24px;
+        width: 95vw;
+        margin: 20px auto;
+        margin-top: 30px;
         display: block;
-        font-size: 24px;
-        padding: 4px 6px;
+        font-size: 20px;
+        padding: 10px;
+        text-align: center;
+        font-weight: 800;
+        border-radius: 12px;
+        border: 5px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .search-input:focus {
+        color: green;
+        background-color: rgb(241, 255, 239);
       }
 
       .search-input::-webkit-input-placeholder {
@@ -46,10 +58,15 @@
         padding: 4px;
         border-bottom: 1px solid #ccc;
         display: flex;
+        line-height: 2;
+      }
+
+      .word-row:last-child {
+        border-bottom: none;
       }
 
       .word-row:hover {
-        background: rgba(0, 0, 0, 0.1);
+        background: #fff;
       }
       .word-row:hover .word-options {
         display: block;
@@ -63,25 +80,29 @@
 
       .btn {
         display: inline-block;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 4px 16px;
+        padding: 3px 8px;
+        border-radius: 5px;
         cursor: pointer;
         user-select: none;
+        background: #0064c9;
+        color: #fff;
       }
       .btn:hover {
         background: rgba(9, 30, 66, 0.2);
       }
       .btn_hover {
-        background: rgba(9, 30, 66, 0.08);
+        background: #0064c9;
+        color: #fff;
+        padding: 3px 8px;
+        border-radius: 5px;
       }
 
       .btn_hover:hover {
-        background: rgba(9, 30, 66, 0.2);
+        background: #0064c9;
       }
 
       .btn_hover:active {
-        background: #e4f0f6;
+        background: #0064c9;
       }
 
       /* super-card */
@@ -134,7 +155,10 @@
     </style>
     <script src="../lib/codemirror/codemirror.js"></script>
     <script src="../lib/codemirror/javascript.js"></script>
-    <link rel="stylesheet" href="../lib/codemirror/codemirror.css" />
+    <link
+      rel="stylesheet"
+      href="../lib/codemirror/codemirror.css"
+    />
     <script src="../lib/dayjs.js"></script>
     <script src="../lib/standalone.module.mini.js"></script>
     <script src="../logic.js"></script>
