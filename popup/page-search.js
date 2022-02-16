@@ -84,8 +84,3 @@ const Search = () => {
     </div>
   `;
 };
-
-//  ${getResult.map(
-//     it =>
-//       html`<div class="search-item">${it}: ${it}</div>`,
-//   )}
