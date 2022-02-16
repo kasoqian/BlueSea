@@ -71,7 +71,7 @@ const defaultConfig = {
   自动发音: true,
   中文注解: false,
   隐藏完成复习的单词: true,
-  单词弹幕速度: 50,
+  单词弹幕速度: 35,
   有道智云key: "",
   有道智云appkey: "",
   // 记忆曲线自定义: [],
